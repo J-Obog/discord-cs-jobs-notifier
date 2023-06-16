@@ -13,9 +13,11 @@ class WorkerRunner:
         while True:
             try:
                 self.worker.work()
-            except:
-                print("Something went wrong")
+            except Exception as e:
+                print(e)
+                return
             time.sleep(self.cadence)
 
     def run(self):
         self.t.start()
+        self.t.join()
