@@ -8,6 +8,8 @@ from notifier.store.redis_store import RedisStore
 from notifier.posting.linkedin import LinkedinJobBoard
 from notifier.worker.notification_worker import NotificationWorker
 from notifier.worker.runner import WorkerRunner
+from notifier.types.job_post import JobPost
+from notifier.types.post_source import PostSource
 
 def main():
     dotenv.load_dotenv()

@@ -26,3 +26,4 @@ class DiscordNotifier(AbstractNotificationPusher):
         }
 
         requests.post(self.webhook_url, json=body)
+        print("Sent")
