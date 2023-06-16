@@ -3,6 +3,7 @@ from notifier.store.store import AbstractStore
 from notifier.posting.job_board import AbstractJobBoard
 from notifier.notify.notification_pusher import AbstractNotificationPusher
 
+
 class NotificationWorker(AbstractWorker):
     def __init__(self, store: AbstractStore, job_board: AbstractJobBoard, pusher: AbstractNotificationPusher) -> None:
         self.store = store
