@@ -4,17 +4,18 @@ import requests
 from notifier.notify.notification_pusher import AbstractNotificationPusher
 from notifier.types.job_post import JobPost
 
+BOT_NAME = "cs-job-notifier"
+BOT_AVATAR = "https://wallpaperaccess.com/full/1428481.jpg"
+
 class DiscordNotifier(AbstractNotificationPusher):
-    def __init__(self, webhook_url: str, bot_name: str, bot_avatar: str) -> None:
+    def __init__(self, webhook_url: str) -> None:
         super().__init__()
         self.webhook_url = webhook_url
-        self.bot_name = bot_name
-        self.bot_avatar = bot_avatar
 
     def send_notification(self, post: JobPost):
         body = {
-            "username": self.bot_name,
-            "avatar_url": self.bot_avatar,
+            "username": BOT_NAME,
+            "avatar_url": BOT_AVATAR,
             "embeds": [
                 {
                     "title": f"New Job Opening!", 
