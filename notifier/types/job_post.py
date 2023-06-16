@@ -11,3 +11,4 @@ class JobPost:
     title: str
     description: Optional[str]
     source: PostSource
+    link: str

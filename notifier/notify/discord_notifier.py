@@ -20,10 +20,9 @@ class DiscordNotifier(AbstractNotificationPusher):
                 {
                     "title": f"New Job Opening!", 
                     "color": 5763719,
-                    "description": f"{post.companyName} has opened a new position for {post.title}"
+                    "description": f"{post.companyName} has opened a new position for {post.title}\nLink: {post.link}"
                 }
             ]
         }
 
         requests.post(self.webhook_url, json=body)
-        print("Sent")

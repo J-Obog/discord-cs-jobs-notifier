@@ -7,6 +7,9 @@ from notifier.types.post_source import PostSource
 
 LINKEDIN_JOBS_URL = "https://www.linkedin.com/voyager/api/voyagerJobsDashJobCards"
 
+def get_id_from_urn(urn: str) -> str:
+    return urn.split(":")[-1]
+
 class LinkedinJobBoard(AbstractJobBoard):
     def __init__(self, jsession_id: str, li_at: str) -> None:
         super().__init__()
@@ -32,13 +35,16 @@ class LinkedinJobBoard(AbstractJobBoard):
 
         for postObj in postObjs:
             postObjData = postObj["jobCardUnion"]["jobPostingCard"]
+            postingId = get_id_from_urn(postObjData["jobPostingUrn"])   
+
             post = JobPost(
-                postingId = postObjData["jobPostingUrn"],
+                postingId = postingId,
                 companyId = postObjData["logo"]["attributes"][0]["detailDataUnion"]["companyLogo"],
                 companyName = postObjData["primaryDescription"]["text"],
                 title = postObjData["jobPostingTitle"],
                 description = None,
-                source = PostSource.LINKEDIN
+                source = PostSource.LINKEDIN,
+                link = f'https://www.linkedin.com/jobs/view/{postingId}/?trk=jobs_biz_prem_srch'
             )
 
             posts.append(post)

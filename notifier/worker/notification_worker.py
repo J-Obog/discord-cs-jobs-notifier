@@ -11,19 +11,12 @@ class NotificationWorker(AbstractWorker):
         self.pusher = pusher
 
     def work(self):
-        print("Getting job postings")
         postings = self.job_board.get_postings()
-        #print(postings)
         
         for post in postings:
             postRecord = self.store.get(post.postingId)
 
             if postRecord is None:
-                print("Cache miss")
                 self.pusher.send_notification(post)
-                print("Sent noty")
                 self.store.set(post.postingId, "1")
-            else:
-                print("Cache hit")
-
                 
