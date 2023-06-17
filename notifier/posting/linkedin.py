@@ -18,40 +18,41 @@ class LinkedinJobBoard(AbstractJobBoard):
         self.session.cookies["JSESSIONID"] = jsession_id
         self.session.headers["csrf-token"] = jsession_id.strip('"')
 
-    def get_postings(self) -> List[JobPost]:
+    def get_postings(self, titles: List[str]) -> List[JobPost]:
         posts = [] 
 
-        decoId = "com.linkedin.voyager.dash.deco.jobs.search.JobSearchCardsCollection-168"
-        count = 25
-        start = 0
-        query = "(origin:JOB_SEARCH_PAGE_OTHER_ENTRY,keywords:software%20engineer%20internship,locationUnion:(geoId:103644278),selectedFilters:(distance:List(25)),spellCorrectionEnabled:true)"
-        q = "jobSearch"
+        if len(titles) > 0:
+            decoId = "com.linkedin.voyager.dash.deco.jobs.search.JobSearchCardsCollection-168"
+            count = 25
+            start = 0
+            query = f"(origin:JOB_SEARCH_PAGE_OTHER_ENTRY,keywords:{titles},locationUnion:(geoId:103644278),selectedFilters:(distance:List(25)),spellCorrectionEnabled:true)"
+            q = "jobSearch"
 
-        url = f"{LINKEDIN_JOBS_URL}?decorationId={decoId}&count={count}&q={q}&query={query}&start={start}"
+            url = f"{LINKEDIN_JOBS_URL}?decorationId={decoId}&count={count}&q={q}&query={query}&start={start}"
 
-        data = self.session.get(url).json()
+            data = self.session.get(url).json()
 
-        postObjs = data["elements"]
+            postObjs = data["elements"]
 
-        for postObj in postObjs:
-            postObjData = postObj["jobCardUnion"]["jobPostingCard"]
-            postingId = get_id_from_urn(postObjData["jobPostingUrn"])   
+            for postObj in postObjs:
+                postObjData = postObj["jobCardUnion"]["jobPostingCard"]
+                postingId = get_id_from_urn(postObjData["jobPostingUrn"])   
 
-            baseLogoObj = postObjData["logo"]["attributes"][0]["detailData"]["companyLogo"]["logo"]["vectorImage"]
-            rootLogoUrl = baseLogoObj["rootUrl"]
-            logoPathSegment = baseLogoObj["artifacts"][0]["fileIdentifyingUrlPathSegment"]
+                baseLogoObj = postObjData["logo"]["attributes"][0]["detailData"]["companyLogo"]["logo"]["vectorImage"]
+                rootLogoUrl = baseLogoObj["rootUrl"]
+                logoPathSegment = baseLogoObj["artifacts"][0]["fileIdentifyingUrlPathSegment"]
 
-            post = JobPost(
-                postingId = postingId,
-                companyId = postObjData["logo"]["attributes"][0]["detailDataUnion"]["companyLogo"],
-                companyName = postObjData["primaryDescription"]["text"],
-                title = postObjData["jobPostingTitle"],
-                description = None,
-                source = PostSource.LINKEDIN,
-                link = f'https://www.linkedin.com/jobs/view/{postingId}',
-                companyLogoUrl =  rootLogoUrl + logoPathSegment
-            )
+                post = JobPost(
+                    postingId = postingId,
+                    companyId = postObjData["logo"]["attributes"][0]["detailDataUnion"]["companyLogo"],
+                    companyName = postObjData["primaryDescription"]["text"],
+                    title = postObjData["jobPostingTitle"],
+                    description = None,
+                    source = PostSource.LINKEDIN,
+                    link = f'https://www.linkedin.com/jobs/view/{postingId}',
+                    companyLogoUrl =  rootLogoUrl + logoPathSegment
+                )
 
-            posts.append(post)
+                posts.append(post)
 
         return posts
