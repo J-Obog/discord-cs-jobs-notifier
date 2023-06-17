@@ -17,10 +17,15 @@ class DiscordNotifier(AbstractNotificationPusher):
             "username": BOT_NAME,
             "avatar_url": BOT_AVATAR,
             "embeds": [
-                {
-                    "title": f"New Job Opening!", 
+              {
+                    "title": f"**New Job Opening @ {post.companyName}**", 
                     "color": 5763719,
-                    "description": f"{post.companyName} has opened a new position for {post.title}\nLink: {post.link}"
+                    "description": f"Position: {post.title}\nApply Link: {post.link}",
+                    "thumbnail": {
+                        "url": post.companyLogoUrl,
+                        "height": 0,
+                        "width": 0 
+                    }
                 }
             ]
         }

@@ -37,6 +37,10 @@ class LinkedinJobBoard(AbstractJobBoard):
             postObjData = postObj["jobCardUnion"]["jobPostingCard"]
             postingId = get_id_from_urn(postObjData["jobPostingUrn"])   
 
+            baseLogoObj = postObjData["logo"]["attributes"][0]["detailData"]["companyLogo"]["logo"]["vectorImage"]
+            rootLogoUrl = baseLogoObj["rootUrl"]
+            logoPathSegment = baseLogoObj["artifacts"][0]["fileIdentifyingUrlPathSegment"]
+
             post = JobPost(
                 postingId = postingId,
                 companyId = postObjData["logo"]["attributes"][0]["detailDataUnion"]["companyLogo"],
@@ -44,7 +48,8 @@ class LinkedinJobBoard(AbstractJobBoard):
                 title = postObjData["jobPostingTitle"],
                 description = None,
                 source = PostSource.LINKEDIN,
-                link = f'https://www.linkedin.com/jobs/view/{postingId}'
+                link = f'https://www.linkedin.com/jobs/view/{postingId}',
+                companyLogoUrl =  rootLogoUrl + logoPathSegment
             )
 
             posts.append(post)
