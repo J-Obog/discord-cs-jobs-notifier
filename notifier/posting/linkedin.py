@@ -44,7 +44,7 @@ class LinkedinJobBoard(AbstractJobBoard):
                 title = postObjData["jobPostingTitle"],
                 description = None,
                 source = PostSource.LINKEDIN,
-                link = f'https://www.linkedin.com/jobs/view/{postingId}/?trk=jobs_biz_prem_srch'
+                link = f'https://www.linkedin.com/jobs/view/{postingId}'
             )
 
             posts.append(post)

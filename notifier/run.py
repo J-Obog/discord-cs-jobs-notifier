@@ -24,6 +24,9 @@ def main():
     runner = WorkerRunner("cs-jobs-linkedin-worker", worker, 30)
     runner.run()
 
+    while True:
+        pass
+
 
 if __name__ == "__main__":
     main()
