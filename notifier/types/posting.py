@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from typing import Optional
+from enum import Enum
 
-from notifier.types.post_source import PostSource
+class PostSource(Enum):
+    LINKEDIN = 0
 
 @dataclass
 class JobPost:

@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from notifier.types.job_post import JobPost
 
-class AbstractNotificationPusher(ABC):
+class JobBoard(ABC):
     @abstractmethod
-    def send_notification(self, post: JobPost):
+    def get_postings(self, titles: List[str]) -> List[JobPost]:
         ...

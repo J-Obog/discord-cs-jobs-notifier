@@ -1,8 +1,8 @@
 from typing import List
 from requests import Session
 
-from notifier.posting.job_board import AbstractJobBoard
-from notifier.types.job_post import JobPost
+from notifier.board.board import JobBoard
+from notifier.types.posting import JobPost
 from notifier.types.post_source import PostSource
 
 LINKEDIN_JOBS_URL = "https://www.linkedin.com/voyager/api/voyagerJobsDashJobCards"
@@ -10,14 +10,15 @@ LINKEDIN_JOBS_URL = "https://www.linkedin.com/voyager/api/voyagerJobsDashJobCard
 def get_id_from_urn(urn: str) -> str:
     return urn.split(":")[-1]
 
-class LinkedinJobBoard(AbstractJobBoard):
+class LinkedinJobBoard(JobBoard):
     def __init__(self, jsession_id: str, li_at: str) -> None:
         super().__init__()
         self.session = Session()
         self.session.cookies['li_at'] = li_at
         self.session.cookies["JSESSIONID"] = jsession_id
-        self.session.headers["csrf-token"] = jsession_id.strip('"')
-
+        self.session.headers["Csrf-Token"] = jsession_id.strip('"')
+        self.session.headers["Accept"] = "application/vnd.linkedin.normalized+json+2.1"
+        
     def get_postings(self, titles: List[str]) -> List[JobPost]:
         posts = [] 
 
@@ -25,12 +26,17 @@ class LinkedinJobBoard(AbstractJobBoard):
             decoId = "com.linkedin.voyager.dash.deco.jobs.search.JobSearchCardsCollection-168"
             count = 25
             start = 0
-            query = f"(origin:JOB_SEARCH_PAGE_OTHER_ENTRY,keywords:{titles},locationUnion:(geoId:103644278),selectedFilters:(distance:List(25)),spellCorrectionEnabled:true)"
+            query = f"(origin:JOB_SEARCH_PAGE_OTHER_ENTRY,keywords:{titles[0]},locationUnion:(geoId:103644278),selectedFilters:(distance:List(25)),spellCorrectionEnabled:true)"
             q = "jobSearch"
 
             url = f"{LINKEDIN_JOBS_URL}?decorationId={decoId}&count={count}&q={q}&query={query}&start={start}"
+            #print(url)
+            resp = self.session.get(url, allow_redirects=False)
+            print(resp.status_code)
+            
+            data = resp.json()
 
-            data = self.session.get(url).json()
+           # print(data)
 
             postObjs = data["elements"]
 
