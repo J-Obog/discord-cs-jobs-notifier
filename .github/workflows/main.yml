@@ -19,7 +19,7 @@ jobs:
       - name: "Install pipenv"
         run: |
           pip install pipenv
-      - name: "Print test secret var":
+      - name: "Print test secret var"
         run: echo ${{ env.TEST_ENV_VAR }}
       - name: "Run notification job"
         run: |
