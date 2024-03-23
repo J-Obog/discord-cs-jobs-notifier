@@ -9,7 +9,7 @@ jobs:
       LINKEDIN_JSESSION_ID: ${{ secrets.LiJSess }} 
       LINKEDIN_LI_AT: ${{ secrets.LiLiat }} 
       DISCORD_WEBHOOK_URL: ${{ secrets.DiscordWbhkUrl }}
-      TEST_ENV_VAR: $${{ secrets.Testy }}
+      TEST_ENV_VAR: ${{ secrets.Testy }}
     steps:
       - uses: actions/checkout@v4
       - name: "Set up python"
@@ -19,8 +19,6 @@ jobs:
       - name: "Install pipenv"
         run: |
           pip install pipenv
-      - name: "Print test secret var"
-        run: echo ${{ env.TEST_ENV_VAR }}
       - name: "Run notification job"
         run: |
           pipenv install

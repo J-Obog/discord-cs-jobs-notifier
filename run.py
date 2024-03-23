@@ -6,6 +6,8 @@ from notifier.board.linkedin import LinkedinJobBoard
 
 def main():
     dotenv.load_dotenv()
+
+    print(os.environ.get("TEST_ENV_VAR"))
     cfg = get_config(dict(os.environ))
 
     job_titles = ["Software Engineer Intern"] 
