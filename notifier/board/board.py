@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from notifier.types.job_post import JobPost
+from notifier.types.posting import JobPost
 
 class JobBoard(ABC):
     @abstractmethod

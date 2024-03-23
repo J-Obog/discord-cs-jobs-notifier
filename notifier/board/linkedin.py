@@ -2,8 +2,7 @@ from typing import List
 from requests import Session
 
 from notifier.board.board import JobBoard
-from notifier.types.posting import JobPost
-from notifier.types.post_source import PostSource
+from notifier.types.posting import JobPost, PostSource
 
 LINKEDIN_JOBS_URL = "https://www.linkedin.com/voyager/api/voyagerJobsDashJobCards"
 
@@ -30,13 +29,10 @@ class LinkedinJobBoard(JobBoard):
             q = "jobSearch"
 
             url = f"{LINKEDIN_JOBS_URL}?decorationId={decoId}&count={count}&q={q}&query={query}&start={start}"
-            #print(url)
+
             resp = self.session.get(url, allow_redirects=False)
-            print(resp.status_code)
             
             data = resp.json()
-
-           # print(data)
 
             postObjs = data["elements"]
 

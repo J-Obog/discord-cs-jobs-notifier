@@ -3,8 +3,6 @@ import os
 from notifier.types.config import get_config
 from notifier.discord import DiscordNotifier
 from notifier.board.linkedin import LinkedinJobBoard
-from typing import List
-from notifier.board.board import JobBoard
 
 def main():
     dotenv.load_dotenv()
