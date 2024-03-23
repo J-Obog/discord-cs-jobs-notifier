@@ -1,0 +1,26 @@
+name: RunScript
+
+on: [push]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Set up python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: "Install pipenv"
+        run: |
+          pip install pipenv
+      - name: "Run notification job"
+        with:
+          env:
+            LINKEDIN_JSESSION_ID: ${{ secrets.LiJSess }} 
+            LINKEDIN_LI_AT: ${{ secrets.LiLiat }} 
+            DISCORD_WEBHOOK_URL: ${{ secrets.DiscordWbhkUrl }} 
+        run: |
+          pipenv install
+          pipenv run python run.py
