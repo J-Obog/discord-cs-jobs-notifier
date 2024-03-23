@@ -5,7 +5,10 @@ on: [push]
 jobs:
   notify:
     runs-on: ubuntu-latest
-    
+    env:
+      LINKEDIN_JSESSION_ID: ${{ secrets.LiJSess }} 
+      LINKEDIN_LI_AT: ${{ secrets.LiLiat }} 
+      DISCORD_WEBHOOK_URL: ${{ secrets.DiscordWbhkUrl }}
     steps:
       - uses: actions/checkout@v4
       - name: "Set up python"
@@ -16,11 +19,6 @@ jobs:
         run: |
           pip install pipenv
       - name: "Run notification job"
-        with:
-          env:
-            LINKEDIN_JSESSION_ID: ${{ secrets.LiJSess }} 
-            LINKEDIN_LI_AT: ${{ secrets.LiLiat }} 
-            DISCORD_WEBHOOK_URL: ${{ secrets.DiscordWbhkUrl }} 
         run: |
           pipenv install
           pipenv run python run.py
