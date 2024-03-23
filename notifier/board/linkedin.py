@@ -16,21 +16,21 @@ class LinkedinJobBoard(JobBoard):
         self.session.cookies['li_at'] = li_at
         self.session.cookies["JSESSIONID"] = jsession_id
         self.session.headers["Csrf-Token"] = jsession_id.strip('"')
-        self.session.headers["Accept"] = "application/vnd.linkedin.normalized+json+2.1"
+        self.session.headers["Accept"] = "*/*"
         
     def get_postings(self, titles: List[str]) -> List[JobPost]:
         posts = [] 
 
         if len(titles) > 0:
             decoId = "com.linkedin.voyager.dash.deco.jobs.search.JobSearchCardsCollection-168"
-            count = 25
+            count = 20
             start = 0
-            query = f"(origin:JOB_SEARCH_PAGE_OTHER_ENTRY,keywords:{titles[0]},locationUnion:(geoId:103644278),selectedFilters:(distance:List(25)),spellCorrectionEnabled:true)"
+            query = f"(origin:JOB_SEARCH_PAGE_OTHER_ENTRY,keywords:Software%20Engineer%20Intern,locationUnion:(geoId:103644278),selectedFilters:(distance:List(25)),spellCorrectionEnabled:true)"
             q = "jobSearch"
 
             url = f"{LINKEDIN_JOBS_URL}?decorationId={decoId}&count={count}&q={q}&query={query}&start={start}"
 
-            resp = self.session.get(url, allow_redirects=False)
+            resp = self.session.get(url)
             
             data = resp.json()
 
@@ -54,6 +54,8 @@ class LinkedinJobBoard(JobBoard):
                     link = f'https://www.linkedin.com/jobs/view/{postingId}',
                     companyLogoUrl =  rootLogoUrl + logoPathSegment
                 )
+                
+                print(post.companyId) 
 
                 posts.append(post)
 
